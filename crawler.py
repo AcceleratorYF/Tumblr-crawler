@@ -25,6 +25,14 @@ def download(url, file_path, ext):
             f.close()
 
 
+def create_table():
+    insert = "CREATE TABLE `Store`.`tumblr` (`id` INT NOT NULL AUTO_INCREMENT," \
+        "`author` VARCHAR(45) NULL,`body` TEXT NULL,`video` TEXT NULL,`photo` " \
+            "TEXT NULL,PRIMARY KEY (`id`),UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);"
+    sql.execute(insert)
+    db.commit()
+
+
 def save_to_db(d):
     insert = "INSERT INTO tumblr (author, body, video, photo) VALUES (%s,%s,%s,%s)"
     sql.execute(insert, (str(d['a']), d['b'], str(d['v']), str(d['p'])))
@@ -33,7 +41,7 @@ def save_to_db(d):
 
 
 def parse(posts, page):
-    path = '/Users/yifan/Downloads/1/tumblr'
+    path = '' #fill in local path
     for p in posts:
         item = {}
         try:
@@ -106,6 +114,7 @@ def login(email, password, url):
 
 
 def main(start):
+    create_table()
     login('', '', "https://www.tumblr.com/login?redirect_to=%2Flikes#")#fill email, password
     get_data(start, start+10)
     sql.close()
